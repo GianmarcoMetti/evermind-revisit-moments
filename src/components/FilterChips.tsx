@@ -16,7 +16,7 @@ const filters: { label: string; value: FilterType; icon: any }[] = [
 
 export const FilterChips = ({ activeFilter, onFilterChange }: FilterChipsProps) => {
   return (
-    <div className="flex gap-3 flex-wrap">
+    <div className="flex gap-3 flex-wrap justify-center">
       {filters.map((filter) => {
         const Icon = filter.icon;
         return (
