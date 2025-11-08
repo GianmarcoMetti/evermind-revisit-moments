@@ -8,6 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar';
 
@@ -29,12 +30,13 @@ export const AppSidebar = () => {
       className={open ? "w-60" : "w-14"}
     >
       <div className="p-4 border-b border-border">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 mb-3">
           <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
             <span className="text-primary-foreground font-bold text-lg">E</span>
           </div>
           {open && <h1 className="text-xl font-bold">Evermind</h1>}
         </div>
+        <SidebarTrigger className="w-full" />
       </div>
 
       <SidebarContent>

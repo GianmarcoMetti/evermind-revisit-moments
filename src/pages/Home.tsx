@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Settings, Bell, ChevronRight, Loader2 } from 'lucide-react';
+import { Bell, ChevronRight, Loader2 } from 'lucide-react';
 import { SearchBarWithMic } from '@/components/SearchBarWithMic';
 import { FilterChips } from '@/components/FilterChips';
 import { MasonryGallery } from '@/components/MasonryGallery';
@@ -11,7 +11,6 @@ import { reminders } from '@/lib/mockData';
 import { FilterType } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { useMemories } from '@/hooks/useMemories';
-import { SidebarTrigger } from '@/components/ui/sidebar';
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -101,20 +100,12 @@ const Home = () => {
       )}
 
       <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between gap-4">
-          <SidebarTrigger />
-          <div className="flex-1 flex justify-center">
-            <SearchBarWithMic
-              value={searchQuery}
-              onChange={setSearchQuery}
-              placeholder="Search memories, people, moments..."
-            />
-          </div>
-          <Link to="/settings">
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <Settings className="h-5 w-5" />
-            </Button>
-          </Link>
+        <div className="container mx-auto px-4 py-4 flex items-center justify-center">
+          <SearchBarWithMic
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search memories, people, moments..."
+          />
         </div>
         <div className="container mx-auto px-4 pb-4">
           <FilterChips activeFilter={activeFilter} onFilterChange={setActiveFilter} />
