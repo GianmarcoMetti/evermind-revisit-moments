@@ -1,5 +1,6 @@
 import { Home, Calendar, Users, Map, MessageCircle } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
+import evermindLogo from '@/assets/evermind-logo.png';
 import {
   Sidebar,
   SidebarContent,
@@ -25,10 +26,12 @@ export const AppSidebar = () => {
       className="w-60 border-r border-border"
     >
       <div className="p-4 border-b border-border">
-        <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
-            <span className="text-primary-foreground font-bold text-lg">E</span>
-          </div>
+        <div className="flex items-center gap-3">
+          <img 
+            src={evermindLogo} 
+            alt="EverMind Logo" 
+            className="h-12 w-12 object-contain"
+          />
           <h1 className="text-xl font-bold">Evermind</h1>
         </div>
       </div>
