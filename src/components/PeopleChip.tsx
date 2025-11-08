@@ -21,8 +21,8 @@ export const PeopleChip = ({ person, onClick }: PeopleChipProps) => {
           {initials}
         </AvatarFallback>
       </Avatar>
-      <div className="flex flex-col items-start">
-        <span className="font-medium text-sm">{displayName}</span>
+      <div className="flex flex-col items-start min-w-0 max-w-[180px]">
+        <span className="font-medium text-sm truncate w-full">{displayName}</span>
         <span className="text-xs text-muted-foreground capitalize">{displayRelationship}</span>
       </div>
     </button>
