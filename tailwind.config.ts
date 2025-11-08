@@ -13,6 +13,16 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Outfit', 'system-ui', 'sans-serif'],
+      },
+      fontSize: {
+        base: ['1.125rem', { lineHeight: '1.6' }],
+        lg: ['1.25rem', { lineHeight: '1.6' }],
+        xl: ['1.5rem', { lineHeight: '1.5' }],
+        '2xl': ['1.875rem', { lineHeight: '1.4' }],
+        '3xl': ['2.25rem', { lineHeight: '1.3' }],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
