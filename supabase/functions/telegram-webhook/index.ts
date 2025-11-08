@@ -162,13 +162,17 @@ Return JSON: {
     // Process people if extracted by AI
     if (memoryData.people && Array.isArray(memoryData.people) && memoryData.people.length > 0) {
       for (const person of memoryData.people) {
-        if (!person.name) continue;
+        // Use relationship as name if name is not provided
+        const personName = person.name || person.relationship;
+        const personRelationship = person.relationship || 'family member';
+        
+        if (!personName) continue;
 
         // Check if person exists
         const { data: existingPerson } = await supabase
           .from('people')
           .select('id')
-          .eq('name', person.name)
+          .eq('name', personName)
           .maybeSingle();
 
         let personId;
@@ -180,8 +184,8 @@ Return JSON: {
           const { data: newPerson, error: personError } = await supabase
             .from('people')
             .insert({
-              name: person.name,
-              relationship_to_user: person.relationship || 'family member',
+              name: personName,
+              relationship_to_user: personRelationship,
             })
             .select('id')
             .single();
@@ -192,7 +196,7 @@ Return JSON: {
           }
 
           personId = newPerson.id;
-          console.log('Created new person:', person.name);
+          console.log('Created new person:', personName);
         }
 
         // Link person to memory
@@ -206,7 +210,7 @@ Return JSON: {
         if (linkError) {
           console.error('Error linking person to memory:', linkError);
         } else {
-          console.log('Linked person to memory:', person.name);
+          console.log('Linked person to memory:', personName);
         }
       }
     }
