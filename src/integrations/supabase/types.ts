@@ -98,26 +98,53 @@ export type Database = {
       people: {
         Row: {
           avatar: string | null
+          bio: string | null
+          birth_year: number | null
+          career: string | null
           created_at: string
           id: string
+          legacy: string | null
+          location: string | null
           name: string
+          passed_away: string | null
+          personality: string | null
+          quote: string | null
           relationship_to_user: string
+          summary: string | null
           updated_at: string
         }
         Insert: {
           avatar?: string | null
+          bio?: string | null
+          birth_year?: number | null
+          career?: string | null
           created_at?: string
           id?: string
+          legacy?: string | null
+          location?: string | null
           name: string
+          passed_away?: string | null
+          personality?: string | null
+          quote?: string | null
           relationship_to_user: string
+          summary?: string | null
           updated_at?: string
         }
         Update: {
           avatar?: string | null
+          bio?: string | null
+          birth_year?: number | null
+          career?: string | null
           created_at?: string
           id?: string
+          legacy?: string | null
+          location?: string | null
           name?: string
+          passed_away?: string | null
+          personality?: string | null
+          quote?: string | null
           relationship_to_user?: string
+          summary?: string | null
           updated_at?: string
         }
         Relationships: []
