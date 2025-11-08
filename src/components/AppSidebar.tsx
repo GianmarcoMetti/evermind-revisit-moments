@@ -23,10 +23,14 @@ export const AppSidebar = () => {
   const { open } = useSidebar();
 
   return (
-    <Sidebar side="left" collapsible="offcanvas">
+    <Sidebar 
+      side="left" 
+      collapsible="icon"
+      className={open ? "w-60" : "w-14"}
+    >
       <div className="p-4 border-b border-border">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
             <span className="text-primary-foreground font-bold text-lg">E</span>
           </div>
           {open && <h1 className="text-xl font-bold">Evermind</h1>}
@@ -40,7 +44,12 @@ export const AppSidebar = () => {
               {navItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <NavLink to={item.url} end className="hover:bg-muted/50" activeClassName="bg-muted text-primary font-medium">
+                    <NavLink 
+                      to={item.url} 
+                      end={item.url === '/'} 
+                      className="hover:bg-muted/50" 
+                      activeClassName="bg-muted text-primary font-medium"
+                    >
                       <item.icon className="h-4 w-4" />
                       {open && <span>{item.title}</span>}
                     </NavLink>
