@@ -34,7 +34,7 @@ export const MessagesSidebar = () => {
   };
 
   return (
-    <Sidebar side="right" collapsible="offcanvas">
+    <Sidebar side="right" collapsible="offcanvas" data-sidebar="right">
       <div className="p-4 border-b border-border flex items-center justify-between">
         <div className="flex items-center gap-2">
           <MessageCircle className="h-5 w-5 text-primary" />

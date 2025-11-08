@@ -5,6 +5,8 @@ import { SearchBarWithMic } from '@/components/SearchBarWithMic';
 import { FilterChips } from '@/components/FilterChips';
 import { MasonryGallery } from '@/components/MasonryGallery';
 import { MessagesSidebar } from '@/components/MessagesSidebar';
+import { MessagesSidebarTrigger } from '@/components/MessagesSidebarTrigger';
+import { AppSidebar } from '@/components/AppSidebar';
 import { PeopleView } from '@/components/PeopleView';
 import { MomentsView } from '@/components/MomentsView';
 import { MapView } from '@/components/MapView';
@@ -60,6 +62,8 @@ const Home = () => {
   return (
     <SidebarProvider>
       <div className="min-h-screen bg-background flex w-full">
+        <AppSidebar />
+        
         <div className="flex-1 flex flex-col">
         {activeReminders.length > 0 && (
           <div className="border-b border-border bg-background">
@@ -105,6 +109,7 @@ const Home = () => {
 
         <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between gap-4">
+            <SidebarTrigger />
             <div className="flex-1 flex justify-center">
               <SearchBarWithMic
                 value={searchQuery}
@@ -113,7 +118,7 @@ const Home = () => {
               />
             </div>
             <div className="flex items-center gap-2">
-              <SidebarTrigger />
+              <MessagesSidebarTrigger />
               <Link to="/settings">
                 <Button variant="ghost" size="icon" className="rounded-full">
                   <Settings className="h-5 w-5" />
