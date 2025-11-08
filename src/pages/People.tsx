@@ -26,21 +26,37 @@ const People = () => {
             <p className="text-xl text-muted-foreground">No people found</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {people.map((person) => {
               const initials = person.name.split(' ').map(n => n[0]).join('').toUpperCase();
               return (
                 <Card
                   key={person.id}
-                  className="p-6 flex flex-col items-center text-center shadow-soft hover:shadow-soft-md transition-all cursor-pointer"
+                  onClick={() => navigate(`/person/${person.id}`)}
+                  className="p-6 flex flex-col shadow-soft hover:shadow-soft-md transition-all cursor-pointer"
                 >
-                  <Avatar className="h-24 w-24 mb-4">
-                    <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
-                      {initials}
-                    </AvatarFallback>
-                  </Avatar>
-                  <h2 className="text-xl font-semibold mb-1">{person.name}</h2>
-                  <p className="text-muted-foreground capitalize">{person.relationshipToUser}</p>
+                  <div className="flex items-start gap-4 mb-4">
+                    <Avatar className="h-16 w-16 shrink-0">
+                      <AvatarFallback className="bg-primary text-primary-foreground text-xl">
+                        {initials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <h2 className="text-lg font-semibold mb-1 truncate">{person.name}</h2>
+                      <p className="text-sm text-muted-foreground capitalize mb-1">{person.relationshipToUser}</p>
+                      {person.summary && (
+                        <p className="text-sm text-muted-foreground">{person.summary}</p>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {person.quote && (
+                    <div className="mt-auto pt-4 border-t border-border">
+                      <p className="text-sm italic text-muted-foreground line-clamp-2">
+                        &ldquo;{person.quote}&rdquo;
+                      </p>
+                    </div>
+                  )}
                 </Card>
               );
             })}

@@ -8,6 +8,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import Home from "./pages/Home";
 import MemoryDetail from "./pages/MemoryDetail";
 import People from "./pages/People";
+import PersonDetail from "./pages/PersonDetail";
 import Map from "./pages/Map";
 import Reminders from "./pages/Reminders";
 import Messages from "./pages/Messages";
@@ -30,6 +31,7 @@ const App = () => (
                 <Route path="/" element={<Home />} />
                 <Route path="/memory/:id" element={<MemoryDetail />} />
                 <Route path="/people" element={<People />} />
+                <Route path="/person/:id" element={<PersonDetail />} />
                 <Route path="/map" element={<Map />} />
                 <Route path="/reminders" element={<Reminders />} />
                 <Route path="/messages" element={<Messages />} />

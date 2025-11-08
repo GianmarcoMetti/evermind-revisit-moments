@@ -3,6 +3,15 @@ export type Person = {
   name: string;
   relationshipToUser: string;
   avatar?: string;
+  bio?: string;
+  birthYear?: number;
+  passedAway?: string;
+  location?: string;
+  career?: string;
+  personality?: string;
+  quote?: string;
+  legacy?: string;
+  summary?: string;
 };
 
 export type MemoryPost = {

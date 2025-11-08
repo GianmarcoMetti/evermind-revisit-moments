@@ -22,6 +22,15 @@ export const usePeople = () => {
         name: person.name,
         relationshipToUser: person.relationship_to_user,
         avatar: person.avatar || undefined,
+        bio: person.bio || undefined,
+        birthYear: person.birth_year || undefined,
+        passedAway: person.passed_away || undefined,
+        location: person.location || undefined,
+        career: person.career || undefined,
+        personality: person.personality || undefined,
+        quote: person.quote || undefined,
+        legacy: person.legacy || undefined,
+        summary: person.summary || undefined,
       }));
 
       setPeople(mappedPeople);
