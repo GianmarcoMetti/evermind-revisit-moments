@@ -62,7 +62,7 @@ const Home = () => {
       <div className="flex-1 flex flex-col">
         {activeReminders.length > 0 && (
           <div className="border-b border-border bg-background">
-            <div className="container mx-auto px-4 py-4">
+            <div className="container mx-auto px-4 py-4 max-w-4xl">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Bell className="h-5 w-5 text-foreground" />
