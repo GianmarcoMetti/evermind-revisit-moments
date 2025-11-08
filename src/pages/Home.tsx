@@ -42,6 +42,14 @@ const Home = () => {
     setActiveFilter('all');
   };
 
+  const handleFilterChange = (filter: FilterType) => {
+    setActiveFilter(filter);
+    // Clear person filter when switching to a different view
+    if (filter !== 'all') {
+      setSelectedPersonId(null);
+    }
+  };
+
   const renderContent = () => {
     if (isLoading) {
       return (
@@ -62,7 +70,7 @@ const Home = () => {
     }
     // Default 'all' view
     return filteredMemories.length > 0 ? (
-      <MasonryGallery memories={filteredMemories} />
+      <MasonryGallery memories={filteredMemories} onPersonClick={handlePersonClick} />
     ) : (
       <div className="text-center py-20">
         <p className="text-xl text-muted-foreground">No memories found</p>
@@ -137,7 +145,7 @@ const Home = () => {
               </Button>
             </div>
           )}
-          <FilterChips activeFilter={activeFilter} onFilterChange={setActiveFilter} />
+          <FilterChips activeFilter={activeFilter} onFilterChange={handleFilterChange} />
         </div>
       </header>
 
