@@ -1,3 +1,4 @@
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.47.10';
 
 const corsHeaders = {
@@ -77,18 +78,74 @@ Deno.serve(async (req) => {
     }
 
     // Parse the message to extract memory details using AI
-    const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${Deno.env.get('LOVABLE_API_KEY')}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        messages: [
-          {
-            role: 'system',
-            content: `You are a helpful assistant that extracts structured memory information from messages. 
+    // If there's a photo, use GPT-4o with vision to analyze and create a rich memory
+    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+    
+    let aiResponse;
+    if (photoUrl && openAIApiKey) {
+      // Use GPT-4o with vision for images
+      aiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${openAIApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o',
+          messages: [
+            {
+              role: 'system',
+              content: `You are a compassionate assistant helping create meaningful memories. Analyze the image and message to create a beautiful memory description.
+Extract:
+- title: A warm, descriptive title (2-5 words)
+- relationship: The sender's relationship (e.g., "daughter", "son", "grandson")
+- story: Rewrite the message as a heartfelt memory story, incorporating what you see in the image. Describe the scene, emotions, and significance. Make it personal and touching.
+- location: Extract any location mentioned
+- category: One of: family, travel, school, celebrations, work, hobby, romance, food
+- people: Extract people mentioned with their names and relationships
+
+Return only JSON: { 
+  "title": "", 
+  "relationship": "", 
+  "story": "", 
+  "location": "", 
+  "category": "",
+  "people": [{"name": "", "relationship": ""}]
+}`
+            },
+            {
+              role: 'user',
+              content: [
+                {
+                  type: 'text',
+                  text: messageText || 'Please describe this memory'
+                },
+                {
+                  type: 'image_url',
+                  image_url: {
+                    url: photoUrl
+                  }
+                }
+              ]
+            }
+          ],
+          max_tokens: 500,
+        }),
+      });
+    } else {
+      // Use Lovable AI for text-only messages
+      aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${Deno.env.get('LOVABLE_API_KEY')}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.5-flash',
+          messages: [
+            {
+              role: 'system',
+              content: `You are a helpful assistant that extracts structured memory information from messages. 
 Extract a title (short, 2-5 words), relationship of the sender (e.g., "daughter", "son", "grandson"), and a story (the full message content).
 If a location is mentioned, extract it. Categorize as one of: family, travel, school, celebrations, work, hobby, romance, food.
 Extract people mentioned in the memory with their names and relationships to the main person (e.g., "Mom", "Dad", "Anna", "Michael").
@@ -100,15 +157,16 @@ Return JSON: {
   "category": "",
   "people": [{"name": "", "relationship": ""}]
 }`
-          },
-          {
-            role: 'user',
-            content: messageText || 'A shared photo memory'
-          }
-        ],
-        max_completion_tokens: 500,
-      }),
-    });
+            },
+            {
+              role: 'user',
+              content: messageText || 'A shared photo memory'
+            }
+          ],
+          max_completion_tokens: 500,
+        }),
+      });
+    }
 
     const aiData = await aiResponse.json();
     let aiContent = aiData.choices?.[0]?.message?.content || '{}';
