@@ -16,7 +16,7 @@ import { useMemories } from '@/hooks/useMemories';
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { memories, isLoading } = useMemories();
 
   const activeReminders = reminders.filter(r => r.active);
@@ -59,32 +59,44 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-background flex">
-      <MessagesSidebar isOpen={isSidebarOpen} onToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
-      
       <div className="flex-1 flex flex-col">
         {activeReminders.length > 0 && (
           <div className="border-b border-border bg-background">
-            <div className="container mx-auto px-4 py-3">
-              <div className="flex items-center justify-between gap-4">
+            <div className="container mx-auto px-4 py-4">
+              <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <Bell className="h-4 w-4 text-muted-foreground" />
-                  <div className="flex items-center gap-3">
-                    {activeReminders.slice(0, 3).map((reminder, index) => (
-                      <div key={reminder.id} className="flex items-center gap-1.5 text-sm">
-                        {index > 0 && <span className="text-muted-foreground">•</span>}
-                        <span className="font-medium">{reminder.createdBy.name}</span>
-                        <span className="text-muted-foreground">—</span>
-                        <span className="text-muted-foreground">{reminder.text}</span>
-                      </div>
-                    ))}
-                  </div>
+                  <Bell className="h-5 w-5 text-foreground" />
+                  <h2 className="text-lg font-semibold">Active Reminders</h2>
                 </div>
                 <Link to="/reminders">
-                  <Button variant="ghost" size="sm" className="gap-1 h-8">
-                    View All
+                  <Button variant="ghost" size="sm" className="gap-1 h-9">
+                    View all
                     <ChevronRight className="h-4 w-4" />
                   </Button>
                 </Link>
+              </div>
+              <div className="space-y-3">
+                {activeReminders.slice(0, 3).map((reminder) => (
+                  <div
+                    key={reminder.id}
+                    className="flex items-center justify-between gap-4 p-4 rounded-xl bg-muted/30"
+                  >
+                    <div className="flex-1 flex items-center gap-4">
+                      <div>
+                        <p className="font-semibold text-foreground">
+                          {reminder.createdBy.name} - {reminder.createdBy.relationship}
+                        </p>
+                        <p className="text-muted-foreground mt-0.5">{reminder.text}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium px-3 py-1.5 rounded-lg bg-primary/10 text-primary whitespace-nowrap">
+                        {reminder.time}
+                      </span>
+                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -114,6 +126,8 @@ const Home = () => {
           {renderContent()}
         </main>
       </div>
+      
+      <MessagesSidebar isOpen={isSidebarOpen} onToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
     </div>
   );
 };

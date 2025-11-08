@@ -30,109 +30,108 @@ export const MessagesSidebar = ({ isOpen, onToggle }: MessagesSidebarProps) => {
   };
 
   return (
-    <>
+    <div 
+      className={`fixed right-0 top-0 h-full bg-card border-l border-border overflow-y-auto transition-all duration-300 z-50 ${
+        isOpen ? 'w-80' : 'w-14'
+      }`}
+    >
       {!isOpen && (
-        <Button
+        <button
           onClick={onToggle}
-          variant="outline"
-          size="icon"
-          className="fixed left-4 top-4 z-50 rounded-full shadow-lg bg-card"
+          className="w-full h-16 flex items-center justify-center hover:bg-muted/50 transition-colors border-b border-border"
         >
           <MessageCircle className="h-5 w-5" />
-        </Button>
+        </button>
       )}
       
-      <div 
-        className={`bg-card border-r border-border h-full overflow-y-auto transition-all duration-300 ${
-          isOpen ? 'w-80' : 'w-0'
-        }`}
-        style={{ display: isOpen ? 'block' : 'none' }}
-      >
-        <div className="p-4 border-b border-border sticky top-0 bg-card z-10">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <MessageCircle className="h-5 w-5 text-primary" />
-              <h2 className="text-lg font-semibold">Messages</h2>
-            </div>
-            <Button
-              onClick={onToggle}
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      
-      <div className="p-2">
-        {Object.entries(messagesByPerson).map(([name, data]) => {
-          const isExpanded = expandedPerson === name;
-          const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
-          
-          return (
-            <div key={name} className="mb-2">
-              <button
-                onClick={() => togglePerson(name)}
-                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-secondary transition-colors"
+      {isOpen && (
+        <>
+          <div className="p-4 border-b border-border sticky top-0 bg-card z-10">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <MessageCircle className="h-5 w-5 text-primary" />
+                <h2 className="text-lg font-semibold">Messages</h2>
+              </div>
+              <Button
+                onClick={onToggle}
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
               >
-                <Avatar className="h-10 w-10">
-                  <AvatarFallback className="bg-primary text-primary-foreground text-sm">
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 text-left">
-                  <p className="font-medium">{name}</p>
-                  <p className="text-xs text-muted-foreground">{data.relationship}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
-                    {data.messages.length}
-                  </span>
-                  {isExpanded ? (
-                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                  ) : (
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                  )}
-                </div>
-              </button>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+      
+          <div className="p-2">
+            {Object.entries(messagesByPerson).map(([name, data]) => {
+              const isExpanded = expandedPerson === name;
+              const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
               
-              {isExpanded && (
-                <div className="ml-4 mt-1 space-y-1">
-                  {data.messages.map((message) => (
-                    <div
-                      key={message.id}
-                      className="w-full text-left p-3 rounded-lg bg-secondary/30 transition-colors"
-                    >
-                      <div className="flex gap-2">
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm mb-1">{message.content}</p>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <p className="text-xs text-muted-foreground">{message.date}</p>
-                            {message.usedForMemory && (
-                              <span className="inline-flex items-center gap-1 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
-                                <Image className="h-3 w-3" />
-                                Memory
-                              </span>
-                            )}
-                            {message.usedForReminder && (
-                              <span className="inline-flex items-center gap-1 text-xs bg-accent/50 text-accent-foreground px-2 py-0.5 rounded-full">
-                                <Bell className="h-3 w-3" />
-                                Reminder
-                              </span>
-                            )}
+              return (
+                <div key={name} className="mb-2">
+                  <button
+                    onClick={() => togglePerson(name)}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-secondary transition-colors"
+                  >
+                    <Avatar className="h-10 w-10">
+                      <AvatarFallback className="bg-primary text-primary-foreground text-sm">
+                        {initials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 text-left">
+                      <p className="font-medium">{name}</p>
+                      <p className="text-xs text-muted-foreground">{data.relationship}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                        {data.messages.length}
+                      </span>
+                      {isExpanded ? (
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                      )}
+                    </div>
+                  </button>
+                  
+                  {isExpanded && (
+                    <div className="ml-4 mt-1 space-y-1">
+                      {data.messages.map((message) => (
+                        <div
+                          key={message.id}
+                          className="w-full text-left p-3 rounded-lg bg-secondary/30 transition-colors"
+                        >
+                          <div className="flex gap-2">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm mb-1">{message.content}</p>
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <p className="text-xs text-muted-foreground">{message.date}</p>
+                                {message.usedForMemory && (
+                                  <span className="inline-flex items-center gap-1 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                                    <Image className="h-3 w-3" />
+                                    Memory
+                                  </span>
+                                )}
+                                {message.usedForReminder && (
+                                  <span className="inline-flex items-center gap-1 text-xs bg-accent/50 text-accent-foreground px-2 py-0.5 rounded-full">
+                                    <Bell className="h-3 w-3" />
+                                    Reminder
+                                  </span>
+                                )}
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      ))}
                     </div>
-                  ))}
+                  )}
                 </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+              );
+            })}
+          </div>
+        </>
+      )}
     </div>
-    </>
   );
 };
