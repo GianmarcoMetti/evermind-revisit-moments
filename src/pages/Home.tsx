@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Settings, Bell, ChevronRight } from 'lucide-react';
+import { Settings, Bell, ChevronRight, Loader2 } from 'lucide-react';
 import { SearchBarWithMic } from '@/components/SearchBarWithMic';
 import { FilterChips } from '@/components/FilterChips';
 import { MasonryGallery } from '@/components/MasonryGallery';
@@ -8,15 +8,16 @@ import { MessagesSidebar } from '@/components/MessagesSidebar';
 import { PeopleView } from '@/components/PeopleView';
 import { MomentsView } from '@/components/MomentsView';
 import { MapView } from '@/components/MapView';
-import { memories, reminders } from '@/lib/mockData';
+import { reminders } from '@/lib/mockData';
 import { FilterType } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { useMemories } from '@/hooks/useMemories';
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const { memories, isLoading } = useMemories();
 
   const activeReminders = reminders.filter(r => r.active);
 
@@ -29,6 +30,14 @@ const Home = () => {
   });
 
   const renderContent = () => {
+    if (isLoading) {
+      return (
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </div>
+      );
+    }
+
     if (activeFilter === 'people') {
       return <PeopleView />;
     }
