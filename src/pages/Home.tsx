@@ -4,8 +4,6 @@ import { Settings, Bell, ChevronRight, Loader2 } from 'lucide-react';
 import { SearchBarWithMic } from '@/components/SearchBarWithMic';
 import { FilterChips } from '@/components/FilterChips';
 import { MasonryGallery } from '@/components/MasonryGallery';
-import { MessagesSidebar } from '@/components/MessagesSidebar';
-import { MessagesSidebarTrigger } from '@/components/MessagesSidebarTrigger';
 import { AppSidebar } from '@/components/AppSidebar';
 import { PeopleView } from '@/components/PeopleView';
 import { MomentsView } from '@/components/MomentsView';
@@ -117,14 +115,11 @@ const Home = () => {
                 placeholder="Search memories, people, moments..."
               />
             </div>
-            <div className="flex items-center gap-2">
-              <MessagesSidebarTrigger />
-              <Link to="/settings">
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <Settings className="h-5 w-5" />
-                </Button>
-              </Link>
-            </div>
+            <Link to="/settings">
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <Settings className="h-5 w-5" />
+              </Button>
+            </Link>
           </div>
           <div className="container mx-auto px-4 pb-4">
             <FilterChips activeFilter={activeFilter} onFilterChange={setActiveFilter} />
@@ -135,8 +130,6 @@ const Home = () => {
           {renderContent()}
         </main>
         </div>
-        
-        <MessagesSidebar />
       </div>
     </SidebarProvider>
   );

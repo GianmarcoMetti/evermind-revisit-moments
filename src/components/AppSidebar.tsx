@@ -1,4 +1,4 @@
-import { Home, Calendar, Users, Map } from 'lucide-react';
+import { Home, Calendar, Users, Map, MessageCircle } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import {
   Sidebar,
@@ -16,6 +16,7 @@ const navItems = [
   { title: 'People', url: '/people', icon: Users },
   { title: 'Map', url: '/map', icon: Map },
   { title: 'Reminders', url: '/reminders', icon: Calendar },
+  { title: 'Messages', url: '/messages', icon: MessageCircle },
 ];
 
 export const AppSidebar = () => {
