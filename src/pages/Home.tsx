@@ -15,6 +15,7 @@ import { useMemories } from '@/hooks/useMemories';
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
+  const [selectedPersonId, setSelectedPersonId] = useState<string | null>(null);
   const { memories, isLoading } = useMemories();
 
   const activeReminders = reminders.filter(r => r.active);
@@ -24,8 +25,15 @@ const Home = () => {
       memory.story.toLowerCase().includes(searchQuery.toLowerCase()) ||
       memory.people.some(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
     
-    return matchesSearch;
+    const matchesPerson = !selectedPersonId || memory.people.some(p => p.id === selectedPersonId);
+    
+    return matchesSearch && matchesPerson;
   });
+
+  const handlePersonClick = (personId: string) => {
+    setSelectedPersonId(personId);
+    setActiveFilter('all');
+  };
 
   const renderContent = () => {
     if (isLoading) {
@@ -37,7 +45,7 @@ const Home = () => {
     }
 
     if (activeFilter === 'people') {
-      return <PeopleView />;
+      return <PeopleView onPersonClick={handlePersonClick} />;
     }
     if (activeFilter === 'moments') {
       return <MomentsView />;
@@ -108,6 +116,18 @@ const Home = () => {
           />
         </div>
         <div className="container mx-auto px-4 pb-4">
+          {selectedPersonId && (
+            <div className="mb-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setSelectedPersonId(null)}
+                className="gap-2"
+              >
+                Clear person filter
+              </Button>
+            </div>
+          )}
           <FilterChips activeFilter={activeFilter} onFilterChange={setActiveFilter} />
         </div>
       </header>

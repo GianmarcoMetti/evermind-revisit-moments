@@ -1,10 +1,12 @@
 import { PeopleChip } from './PeopleChip';
-import { useNavigate } from 'react-router-dom';
 import { usePeople } from '@/hooks/usePeople';
 import { Loader2 } from 'lucide-react';
 
-export const PeopleView = () => {
-  const navigate = useNavigate();
+interface PeopleViewProps {
+  onPersonClick: (personId: string) => void;
+}
+
+export const PeopleView = ({ onPersonClick }: PeopleViewProps) => {
   const { people, isLoading } = usePeople();
 
   if (isLoading) {
@@ -31,7 +33,7 @@ export const PeopleView = () => {
           <PeopleChip
             key={person.id}
             person={person}
-            onClick={() => navigate('/people')}
+            onClick={() => onPersonClick(person.id)}
           />
         ))}
       </div>
