@@ -53,6 +53,34 @@ const Home = () => {
       <MessagesSidebar isOpen={isSidebarOpen} onToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
       
       <div className="flex-1 flex flex-col">
+        {activeReminders.length > 0 && (
+          <div className="border-b border-border bg-background">
+            <div className="container mx-auto px-4 py-3">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  <Bell className="h-4 w-4 text-muted-foreground" />
+                  <div className="flex items-center gap-3">
+                    {activeReminders.slice(0, 3).map((reminder, index) => (
+                      <div key={reminder.id} className="flex items-center gap-1.5 text-sm">
+                        {index > 0 && <span className="text-muted-foreground">•</span>}
+                        <span className="font-medium">{reminder.createdBy.name}</span>
+                        <span className="text-muted-foreground">—</span>
+                        <span className="text-muted-foreground">{reminder.text}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <Link to="/reminders">
+                  <Button variant="ghost" size="sm" className="gap-1 h-8">
+                    View All
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
         <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between gap-4">
             <div className="flex-1 flex justify-center">
@@ -73,40 +101,7 @@ const Home = () => {
           </div>
         </header>
 
-        <main className="container mx-auto px-4 flex-1 overflow-y-auto">
-          {activeReminders.length > 0 && (
-            <Card className="mb-6 mt-6 p-4 bg-accent/30 border-accent">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Bell className="h-5 w-5 text-primary" />
-                    <h2 className="text-lg font-semibold">Active Reminders</h2>
-                  </div>
-                  <div className="space-y-2">
-                    {activeReminders.slice(0, 3).map((reminder) => (
-                      <div key={reminder.id} className="flex items-start gap-3 p-2 rounded-lg bg-background/50">
-                        <div className="flex-1">
-                          <p className="text-sm">
-                            <span className="font-medium">{reminder.createdBy.name}</span>
-                            <span className="text-muted-foreground"> — {reminder.createdBy.relationship} — </span>
-                            <span>{reminder.text}</span>
-                          </p>
-                          <p className="text-xs text-muted-foreground mt-1">{reminder.time}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <Link to="/reminders">
-                  <Button variant="ghost" size="sm" className="gap-1">
-                    View All
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-              </div>
-            </Card>
-          )}
-          
+        <main className="container mx-auto px-4 flex-1 overflow-y-auto py-6">
           {renderContent()}
         </main>
       </div>

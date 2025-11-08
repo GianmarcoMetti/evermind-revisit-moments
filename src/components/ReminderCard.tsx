@@ -20,7 +20,13 @@ export const ReminderCard = ({ reminder }: ReminderCardProps) => {
       </div>
       <div className="flex-1">
         <p className="font-medium text-lg">{reminder.text}</p>
-        <p className="text-muted-foreground">{reminder.time}</p>
+        <div className="flex items-center gap-2 mt-1">
+          <p className="text-sm text-muted-foreground">{reminder.time}</p>
+          <span className="text-muted-foreground">•</span>
+          <p className="text-sm text-muted-foreground">
+            Set by <span className="font-medium">{reminder.createdBy.name}</span> ({reminder.createdBy.relationship})
+          </p>
+        </div>
       </div>
     </Card>
   );
