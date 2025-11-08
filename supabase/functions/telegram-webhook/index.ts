@@ -103,13 +103,22 @@ Return JSON: { "title": "", "relationship": "", "story": "", "location": "", "ca
     });
 
     const aiData = await aiResponse.json();
-    const aiContent = aiData.choices?.[0]?.message?.content || '{}';
+    let aiContent = aiData.choices?.[0]?.message?.content || '{}';
+    
+    // Strip markdown code blocks if present
+    aiContent = aiContent.trim();
+    if (aiContent.startsWith('```json')) {
+      aiContent = aiContent.replace(/^```json\n/, '').replace(/\n```$/, '');
+    } else if (aiContent.startsWith('```')) {
+      aiContent = aiContent.replace(/^```\n/, '').replace(/\n```$/, '');
+    }
     
     let memoryData;
     try {
       memoryData = JSON.parse(aiContent);
     } catch (e) {
       console.error('Failed to parse AI response:', e);
+      console.error('AI Content was:', aiContent);
       memoryData = {
         title: messageText.substring(0, 50) || 'New Memory',
         relationship: 'family member',

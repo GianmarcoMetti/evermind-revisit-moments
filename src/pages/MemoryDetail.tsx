@@ -1,15 +1,68 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Calendar, Volume2 } from 'lucide-react';
-import { memories } from '@/lib/mockData';
+import { ArrowLeft, MapPin, Calendar, Volume2, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PeopleChip } from '@/components/PeopleChip';
 import { RelationshipBadge } from '@/components/RelationshipBadge';
 import { Card } from '@/components/ui/card';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { MemoryPost } from '@/lib/types';
 
 const MemoryDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const memory = memories.find((m) => m.id === id);
+  const [memory, setMemory] = useState<MemoryPost | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMemory = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('memories')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (error) throw error;
+
+        if (data) {
+          setMemory({
+            id: data.id,
+            title: data.title,
+            date: data.date,
+            location: data.location || undefined,
+            media: {
+              url: data.media_url || '',
+              aspect: 'square' as const,
+            },
+            people: [],
+            story: data.story,
+            postedBy: {
+              name: data.created_by_name,
+              relationship: data.created_by_relationship,
+            },
+            category: data.category as any,
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching memory:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchMemory();
+    }
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   if (!memory) {
     return (
@@ -92,30 +145,6 @@ const MemoryDetail = () => {
           </div>
         </Card>
 
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold mb-4">Related Memories</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {memories
-              .filter((m) => m.id !== memory.id)
-              .slice(0, 4)
-              .map((relatedMemory) => (
-                <div
-                  key={relatedMemory.id}
-                  onClick={() => navigate(`/memory/${relatedMemory.id}`)}
-                  className="cursor-pointer rounded-xl overflow-hidden shadow-soft hover:shadow-soft-md transition-all hover:scale-105"
-                >
-                  <img
-                    src={relatedMemory.media.url}
-                    alt={relatedMemory.title}
-                    className="w-full h-32 object-cover"
-                  />
-                  <div className="p-2 bg-card">
-                    <p className="text-sm font-medium truncate">{relatedMemory.title}</p>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
       </div>
     </div>
   );
