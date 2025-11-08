@@ -12,11 +12,11 @@ import { reminders } from '@/lib/mockData';
 import { FilterType } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { useMemories } from '@/hooks/useMemories';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { memories, isLoading } = useMemories();
 
   const activeReminders = reminders.filter(r => r.active);
@@ -58,8 +58,9 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
-      <div className="flex-1 flex flex-col">
+    <SidebarProvider>
+      <div className="min-h-screen bg-background flex w-full">
+        <div className="flex-1 flex flex-col">
         {activeReminders.length > 0 && (
           <div className="border-b border-border bg-background">
             <div className="container mx-auto px-4 py-4 max-w-4xl">
@@ -111,11 +112,14 @@ const Home = () => {
                 placeholder="Search memories, people, moments..."
               />
             </div>
-            <Link to="/settings">
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <Settings className="h-5 w-5" />
-              </Button>
-            </Link>
+            <div className="flex items-center gap-2">
+              <SidebarTrigger />
+              <Link to="/settings">
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <Settings className="h-5 w-5" />
+                </Button>
+              </Link>
+            </div>
           </div>
           <div className="container mx-auto px-4 pb-4">
             <FilterChips activeFilter={activeFilter} onFilterChange={setActiveFilter} />
@@ -125,10 +129,11 @@ const Home = () => {
         <main className="container mx-auto px-4 flex-1 overflow-y-auto py-6">
           {renderContent()}
         </main>
+        </div>
+        
+        <MessagesSidebar />
       </div>
-      
-      <MessagesSidebar isOpen={isSidebarOpen} onToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
-    </div>
+    </SidebarProvider>
   );
 };
 
