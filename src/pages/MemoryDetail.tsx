@@ -17,30 +17,55 @@ const MemoryDetail = () => {
   useEffect(() => {
     const fetchMemory = async () => {
       try {
-        const { data, error } = await supabase
+        const { data: memoryData, error: memoryError } = await supabase
           .from('memories')
           .select('*')
           .eq('id', id)
           .single();
 
-        if (error) throw error;
+        if (memoryError) throw memoryError;
 
-        if (data) {
+        // Fetch people for this memory
+        const { data: memoryPeopleData, error: memoryPeopleError } = await supabase
+          .from('memory_people')
+          .select(`
+            people:person_id (
+              id,
+              name,
+              relationship_to_user,
+              avatar
+            )
+          `)
+          .eq('memory_id', id);
+
+        if (memoryPeopleError) throw memoryPeopleError;
+
+        const peopleList = (memoryPeopleData || [])
+          .map((mp: any) => mp.people)
+          .filter(Boolean)
+          .map((person: any) => ({
+            id: person.id,
+            name: person.name,
+            relationshipToUser: person.relationship_to_user,
+            avatar: person.avatar,
+          }));
+
+        if (memoryData) {
           setMemory({
-            id: data.id,
-            title: data.title,
-            date: data.date,
-            location: data.location || undefined,
+            id: memoryData.id,
+            title: memoryData.title,
+            date: memoryData.date,
+            location: memoryData.location || undefined,
             media: {
-              url: data.media_url || '',
+              url: memoryData.media_url || '',
               aspect: 'square' as const,
             },
-            people: [],
-            story: data.story,
+            people: peopleList,
+            story: memoryData.story,
             postedBy: {
-              relationship: data.created_by_relationship,
+              relationship: memoryData.created_by_relationship,
             },
-            category: data.category as any,
+            category: memoryData.category as any,
           });
         }
       } catch (error) {

@@ -20,6 +20,13 @@ const Home = () => {
 
   const activeReminders = reminders.filter(r => r.active);
 
+  // Get selected person details
+  const selectedPerson = selectedPersonId 
+    ? memories
+        .flatMap(m => m.people)
+        .find(p => p.id === selectedPersonId)
+    : null;
+
   const filteredMemories = memories.filter((memory) => {
     const matchesSearch = memory.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       memory.story.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -116,15 +123,17 @@ const Home = () => {
           />
         </div>
         <div className="container mx-auto px-4 pb-4">
-          {selectedPersonId && (
-            <div className="mb-3">
+          {selectedPersonId && selectedPerson && (
+            <div className="mb-3 flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">Showing memories with:</span>
               <Button
-                variant="outline"
+                variant="secondary"
                 size="sm"
                 onClick={() => setSelectedPersonId(null)}
                 className="gap-2"
               >
-                Clear person filter
+                {selectedPerson.name}
+                <span className="text-xs text-muted-foreground">✕</span>
               </Button>
             </div>
           )}

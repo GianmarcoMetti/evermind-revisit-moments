@@ -8,6 +8,8 @@ interface PeopleChipProps {
 
 export const PeopleChip = ({ person, onClick }: PeopleChipProps) => {
   const initials = person.name.split(' ').map(n => n[0]).join('').toUpperCase();
+  const displayName = person.name;
+  const displayRelationship = person.relationshipToUser;
 
   return (
     <button
@@ -20,8 +22,8 @@ export const PeopleChip = ({ person, onClick }: PeopleChipProps) => {
         </AvatarFallback>
       </Avatar>
       <div className="flex flex-col items-start">
-        <span className="font-medium text-sm">{person.name}</span>
-        <span className="text-xs text-muted-foreground">{person.relationshipToUser}</span>
+        <span className="font-medium text-sm">{displayName}</span>
+        <span className="text-xs text-muted-foreground capitalize">{displayRelationship}</span>
       </div>
     </button>
   );
