@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      memories: {
+        Row: {
+          category: string | null
+          created_at: string
+          created_by_name: string
+          created_by_relationship: string
+          date: string
+          id: string
+          location: string | null
+          media_url: string | null
+          story: string
+          telegram_user_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          created_by_name: string
+          created_by_relationship: string
+          date?: string
+          id?: string
+          location?: string | null
+          media_url?: string | null
+          story: string
+          telegram_user_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          created_by_name?: string
+          created_by_relationship?: string
+          date?: string
+          id?: string
+          location?: string | null
+          media_url?: string | null
+          story?: string
+          telegram_user_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
