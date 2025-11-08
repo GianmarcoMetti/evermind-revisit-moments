@@ -8,8 +8,6 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarTrigger,
-  useSidebar,
 } from '@/components/ui/sidebar';
 
 const navItems = [
@@ -21,22 +19,18 @@ const navItems = [
 ];
 
 export const AppSidebar = () => {
-  const { open } = useSidebar();
-
   return (
     <Sidebar 
-      side="left" 
-      collapsible="icon"
-      className={open ? "w-60" : "w-14"}
+      side="left"
+      className="w-60 border-r border-border"
     >
       <div className="p-4 border-b border-border">
-        <div className="flex items-center gap-2 mb-3">
+        <div className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
             <span className="text-primary-foreground font-bold text-lg">E</span>
           </div>
-          {open && <h1 className="text-xl font-bold">Evermind</h1>}
+          <h1 className="text-xl font-bold">Evermind</h1>
         </div>
-        <SidebarTrigger className="w-full" />
       </div>
 
       <SidebarContent>
@@ -53,7 +47,7 @@ export const AppSidebar = () => {
                       activeClassName="bg-muted text-primary font-medium"
                     >
                       <item.icon className="h-4 w-4" />
-                      {open && <span>{item.title}</span>}
+                      <span>{item.title}</span>
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Type, Contrast, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -11,8 +10,7 @@ const Settings = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="sticky top-0 z-10 bg-card border-b border-border shadow-soft">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <SidebarTrigger />
+        <div className="container mx-auto px-4 py-4">
           <h1 className="text-2xl font-semibold">Settings</h1>
         </div>
       </header>
