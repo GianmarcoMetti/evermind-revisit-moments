@@ -1,21 +1,60 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Briefcase, Heart, Quote, Loader2 } from 'lucide-react';
+import { ArrowLeft, MapPin, Briefcase, Heart, Calendar, Quote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { usePeople } from '@/hooks/usePeople';
-import { useMemories } from '@/hooks/useMemories';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { Person } from '@/lib/types';
+import { Loader2 } from 'lucide-react';
 
 const PersonDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { people, isLoading: peopleLoading } = usePeople();
-  const { memories, isLoading: memoriesLoading } = useMemories();
+  const [person, setPerson] = useState<Person | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const person = people.find(p => p.id === id);
-  const personMemories = memories.filter(m => m.people.some(p => p.id === id));
+  useEffect(() => {
+    const fetchPerson = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('people')
+          .select('*')
+          .eq('id', id)
+          .single();
 
-  if (peopleLoading || memoriesLoading) {
+        if (error) throw error;
+
+        if (data) {
+          setPerson({
+            id: data.id,
+            name: data.name,
+            relationshipToUser: data.relationship_to_user,
+            avatar: data.avatar || undefined,
+            bio: data.bio || undefined,
+            birthYear: data.birth_year || undefined,
+            passedAway: data.passed_away || undefined,
+            location: data.location || undefined,
+            career: data.career || undefined,
+            personality: data.personality || undefined,
+            quote: data.quote || undefined,
+            legacy: data.legacy || undefined,
+            summary: data.summary || undefined,
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching person:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchPerson();
+    }
+  }, [id]);
+
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -35,10 +74,10 @@ const PersonDetail = () => {
   }
 
   const initials = person.name.split(' ').map(n => n[0]).join('').toUpperCase();
-  const age = person.birthYear ? new Date().getFullYear() - person.birthYear : null;
+  const currentAge = person.birthYear && !person.passedAway ? new Date().getFullYear() - person.birthYear : null;
 
   return (
-    <div className="min-h-screen bg-background pb-8">
+    <div className="min-h-screen bg-background flex flex-col">
       <header className="sticky top-0 z-10 bg-card border-b border-border shadow-soft">
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
           <Button
@@ -53,110 +92,95 @@ const PersonDetail = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* Header Card */}
-        <Card className="p-8 shadow-soft-lg mb-6">
-          <div className="flex flex-col md:flex-row gap-6 items-start">
-            <Avatar className="h-32 w-32 shrink-0">
-              <AvatarFallback className="bg-primary text-primary-foreground text-4xl">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
-            
-            <div className="flex-1">
-              <h2 className="text-3xl font-bold mb-2">{person.name}</h2>
-              <p className="text-xl text-muted-foreground capitalize mb-4">{person.relationshipToUser}</p>
-              
-              <div className="space-y-2">
-                {person.location && (
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <MapPin className="h-4 w-4" />
-                    <span>{person.location}</span>
-                  </div>
-                )}
-                {person.career && (
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Briefcase className="h-4 w-4" />
-                    <span>{person.career}</span>
-                  </div>
-                )}
-                {person.birthYear && (
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Heart className="h-4 w-4" />
-                    <span>Born {person.birthYear}{age && !person.passedAway && ` (age ${age})`}</span>
-                  </div>
-                )}
-                {person.passedAway && (
-                  <div className="text-muted-foreground">
-                    <span>{person.passedAway}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        {/* Quote Card */}
-        {person.quote && (
-          <Card className="p-6 shadow-soft mb-6 bg-secondary/30">
-            <div className="flex gap-4">
-              <Quote className="h-8 w-8 text-primary shrink-0" />
-              <div>
-                <p className="text-lg italic leading-relaxed">&ldquo;{person.quote}&rdquo;</p>
-                <p className="text-sm text-muted-foreground mt-2">— Lotte about {person.name}</p>
-              </div>
-            </div>
-          </Card>
-        )}
-
-        {/* Biography Section */}
-        {person.bio && (
-          <Card className="p-6 shadow-soft mb-6">
-            <h3 className="text-xl font-semibold mb-4">About</h3>
-            <p className="text-lg leading-relaxed whitespace-pre-line">{person.bio}</p>
-          </Card>
-        )}
-
-        {/* Personality Section */}
-        {person.personality && (
-          <Card className="p-6 shadow-soft mb-6">
-            <h3 className="text-xl font-semibold mb-4">Personality & Relationship</h3>
-            <p className="text-lg leading-relaxed whitespace-pre-line">{person.personality}</p>
-          </Card>
-        )}
-
-        {/* Legacy Section */}
-        {person.legacy && (
-          <Card className="p-6 shadow-soft mb-6">
-            <h3 className="text-xl font-semibold mb-4">Legacy</h3>
-            <p className="text-lg leading-relaxed whitespace-pre-line">{person.legacy}</p>
-          </Card>
-        )}
-
-        {/* Shared Memories Section */}
-        {personMemories.length > 0 && (
-          <Card className="p-6 shadow-soft">
-            <h3 className="text-xl font-semibold mb-4">Shared Memories ({personMemories.length})</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {personMemories.map((memory) => (
-                <div
-                  key={memory.id}
-                  onClick={() => navigate(`/memory/${memory.id}`)}
-                  className="relative overflow-hidden rounded-lg cursor-pointer transition-all hover:scale-105 shadow-soft"
-                >
-                  <img
-                    src={memory.media.url}
-                    alt={memory.title}
-                    className="w-full h-32 object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-2">
-                    <span className="text-white text-sm font-medium">{memory.title}</span>
-                  </div>
+      <main className="container mx-auto px-4 py-8 flex-1">
+        <div className="max-w-4xl mx-auto space-y-6">
+          {/* Header Card */}
+          <Card className="p-8 shadow-soft-lg">
+            <div className="flex items-start gap-6">
+              <Avatar className="h-24 w-24">
+                <AvatarFallback className="bg-primary text-primary-foreground text-3xl">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1">
+                <h2 className="text-3xl font-bold mb-2">{person.name}</h2>
+                <div className="flex flex-wrap gap-3 mb-4">
+                  <span className="inline-flex items-center gap-2 bg-secondary px-4 py-2 rounded-full">
+                    <Heart className="h-4 w-4 text-primary" />
+                    <span className="font-medium capitalize">{person.relationshipToUser}</span>
+                  </span>
+                  {person.location && (
+                    <span className="inline-flex items-center gap-2 bg-secondary px-4 py-2 rounded-full text-sm">
+                      <MapPin className="h-4 w-4" />
+                      {person.location}
+                    </span>
+                  )}
+                  {person.birthYear && (
+                    <span className="inline-flex items-center gap-2 bg-secondary px-4 py-2 rounded-full text-sm">
+                      <Calendar className="h-4 w-4" />
+                      Born {person.birthYear}
+                      {currentAge && ` (age ${currentAge})`}
+                    </span>
+                  )}
                 </div>
-              ))}
+                {person.summary && (
+                  <p className="text-lg text-muted-foreground">{person.summary}</p>
+                )}
+              </div>
             </div>
+
+            {person.quote && (
+              <div className="mt-6 pt-6 border-t border-border">
+                <div className="flex gap-3 items-start">
+                  <Quote className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                  <p className="text-lg italic text-foreground">"{person.quote}"</p>
+                </div>
+              </div>
+            )}
           </Card>
-        )}
+
+          {/* Bio Section */}
+          {person.bio && (
+            <Card className="p-6 shadow-soft">
+              <h3 className="text-xl font-semibold mb-4">About</h3>
+              <p className="text-foreground leading-relaxed whitespace-pre-line">{person.bio}</p>
+            </Card>
+          )}
+
+          {/* Career Section */}
+          {person.career && (
+            <Card className="p-6 shadow-soft">
+              <div className="flex items-center gap-2 mb-4">
+                <Briefcase className="h-5 w-5 text-primary" />
+                <h3 className="text-xl font-semibold">Career</h3>
+              </div>
+              <p className="text-foreground leading-relaxed">{person.career}</p>
+            </Card>
+          )}
+
+          {/* Personality Section */}
+          {person.personality && (
+            <Card className="p-6 shadow-soft">
+              <h3 className="text-xl font-semibold mb-4">Personality & Relationship</h3>
+              <p className="text-foreground leading-relaxed whitespace-pre-line">{person.personality}</p>
+            </Card>
+          )}
+
+          {/* Legacy Section */}
+          {person.legacy && (
+            <Card className="p-6 shadow-soft">
+              <h3 className="text-xl font-semibold mb-4">Legacy</h3>
+              <p className="text-foreground leading-relaxed whitespace-pre-line">{person.legacy}</p>
+            </Card>
+          )}
+
+          {/* Passed Away Notice */}
+          {person.passedAway && (
+            <Card className="p-6 shadow-soft bg-muted/30">
+              <p className="text-foreground">{person.passedAway}</p>
+            </Card>
+          )}
+        </div>
       </main>
     </div>
   );
