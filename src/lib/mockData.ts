@@ -26,6 +26,8 @@ export const memories: MemoryPost[] = [
     people: [people[0], people[2]],
     story: 'We spent the most beautiful evening watching the sunset together. The waves were gentle, and Sarah collected seashells while we talked about her school year. The sky turned the most incredible shades of pink and orange.',
     postedBy: { name: 'Anna', relationship: 'daughter' },
+    category: 'travel',
+    coordinates: { lat: 34.0522, lng: -118.2437 },
   },
   {
     id: '2',
@@ -36,6 +38,8 @@ export const memories: MemoryPost[] = [
     people: [people[0], people[1], people[2]],
     story: 'The whole family gathered for Sunday dinner. We had your favorite roast chicken and talked for hours. Michael told us about his new job, and everyone laughed at the old stories you shared. It was such a warm, happy evening.',
     postedBy: { name: 'Michael', relationship: 'son' },
+    category: 'family',
+    coordinates: { lat: 40.7128, lng: -74.0060 },
   },
   {
     id: '3',
@@ -46,6 +50,8 @@ export const memories: MemoryPost[] = [
     people: [people[4]],
     story: 'Margaret and I visited the beautiful spring garden. The cherry blossoms were in full bloom, and we sat on the bench under your favorite tree. We remembered all the times we used to visit together when we were young.',
     postedBy: { name: 'Margaret', relationship: 'sister' },
+    category: 'family',
+    coordinates: { lat: 51.5074, lng: -0.1278 },
   },
   {
     id: '4',
@@ -56,6 +62,8 @@ export const memories: MemoryPost[] = [
     people: [people[3]],
     story: 'Tom found a bicycle just like the one you used to ride! He took this photo and wanted to share it with you. Remember all those rides through the countryside? Such wonderful memories.',
     postedBy: { name: 'Tom', relationship: 'friend' },
+    category: 'hobby',
+    coordinates: { lat: 48.8566, lng: 2.3522 },
   },
   {
     id: '5',
@@ -66,6 +74,8 @@ export const memories: MemoryPost[] = [
     people: [people[1]],
     story: 'Michael went on a hiking trip and visited the lake we used to camp at. He said the place hasn\'t changed a bit and he could almost hear your voice teaching him how to fish. He wishes you could see how peaceful it still is.',
     postedBy: { name: 'Michael', relationship: 'son' },
+    category: 'travel',
+    coordinates: { lat: 47.6062, lng: -122.3321 },
   },
   {
     id: '6',
@@ -76,6 +86,8 @@ export const memories: MemoryPost[] = [
     people: [],
     story: 'Found this beautiful photo from your 50th wedding anniversary. The love and joy in your faces tells such a beautiful story. What an incredible journey you both shared together.',
     postedBy: { name: 'Anna', relationship: 'daughter' },
+    category: 'romance',
+    coordinates: { lat: 41.8781, lng: -87.6298 },
   },
   {
     id: '7',
@@ -86,6 +98,8 @@ export const memories: MemoryPost[] = [
     people: [people[0], people[2]],
     story: 'Sarah and I took a walk through the forest path you love so much. The autumn colors were breathtaking! Sarah said it reminded her of all the nature walks we used to take with you when she was little.',
     postedBy: { name: 'Anna', relationship: 'daughter' },
+    category: 'family',
+    coordinates: { lat: 42.3601, lng: -71.0589 },
   },
   {
     id: '8',
@@ -96,6 +110,8 @@ export const memories: MemoryPost[] = [
     people: [people[0], people[1], people[2]],
     story: 'We celebrated with your favorite chocolate cake! Everyone was here, and we all made wishes together. The house was filled with love, laughter, and so many happy memories. We missed having you blow out the candles with us.',
     postedBy: { name: 'Anna', relationship: 'daughter' },
+    category: 'celebrations',
+    coordinates: { lat: 37.7749, lng: -122.4194 },
   },
 ];
 

@@ -20,6 +20,8 @@ export type MemoryPost = {
     name: string;
     relationship: string;
   };
+  category: MomentCategory;
+  coordinates?: { lat: number; lng: number };
 };
 
 export type Reminder = {
@@ -30,3 +32,5 @@ export type Reminder = {
 };
 
 export type FilterType = 'all' | 'people' | 'moments' | 'map';
+
+export type MomentCategory = 'family' | 'travel' | 'school' | 'celebrations' | 'work' | 'hobby' | 'romance' | 'food';
