@@ -89,16 +89,24 @@ Deno.serve(async (req) => {
           {
             role: 'system',
             content: `You are a helpful assistant that extracts structured memory information from messages. 
-Extract a title (short, 2-5 words), relationship (e.g., "daughter", "son", "grandson"), and a story (the full message content).
+Extract a title (short, 2-5 words), relationship of the sender (e.g., "daughter", "son", "grandson"), and a story (the full message content).
 If a location is mentioned, extract it. Categorize as one of: family, travel, school, celebrations, work, hobby, romance, food.
-Return JSON: { "title": "", "relationship": "", "story": "", "location": "", "category": "" }`
+Extract people mentioned in the memory with their names and relationships to the main person (e.g., "Mom", "Dad", "Anna", "Michael").
+Return JSON: { 
+  "title": "", 
+  "relationship": "", 
+  "story": "", 
+  "location": "", 
+  "category": "",
+  "people": [{"name": "", "relationship": ""}]
+}`
           },
           {
             role: 'user',
             content: messageText || 'A shared photo memory'
           }
         ],
-        max_completion_tokens: 300,
+        max_completion_tokens: 500,
       }),
     });
 
@@ -150,6 +158,58 @@ Return JSON: { "title": "", "relationship": "", "story": "", "location": "", "ca
     }
 
     console.log('Memory created:', data);
+
+    // Process people if extracted by AI
+    if (memoryData.people && Array.isArray(memoryData.people) && memoryData.people.length > 0) {
+      for (const person of memoryData.people) {
+        if (!person.name) continue;
+
+        // Check if person exists
+        const { data: existingPerson } = await supabase
+          .from('people')
+          .select('id')
+          .eq('name', person.name)
+          .maybeSingle();
+
+        let personId;
+
+        if (existingPerson) {
+          personId = existingPerson.id;
+        } else {
+          // Create new person
+          const { data: newPerson, error: personError } = await supabase
+            .from('people')
+            .insert({
+              name: person.name,
+              relationship_to_user: person.relationship || 'family member',
+            })
+            .select('id')
+            .single();
+
+          if (personError) {
+            console.error('Error creating person:', personError);
+            continue;
+          }
+
+          personId = newPerson.id;
+          console.log('Created new person:', person.name);
+        }
+
+        // Link person to memory
+        const { error: linkError } = await supabase
+          .from('memory_people')
+          .insert({
+            memory_id: data.id,
+            person_id: personId,
+          });
+
+        if (linkError) {
+          console.error('Error linking person to memory:', linkError);
+        } else {
+          console.log('Linked person to memory:', person.name);
+        }
+      }
+    }
 
     // Send confirmation to Telegram user
     await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
