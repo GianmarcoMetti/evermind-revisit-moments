@@ -82,7 +82,7 @@ const Home = () => {
                   <div className="flex-1 flex items-center gap-4">
                     <div>
                       <p className="font-semibold text-foreground">
-                        {reminder.createdBy.name} - {reminder.createdBy.relationship}
+                        {reminder.createdBy.relationship}
                       </p>
                       <p className="text-muted-foreground mt-0.5">{reminder.text}</p>
                     </div>

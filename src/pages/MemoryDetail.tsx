@@ -38,7 +38,6 @@ const MemoryDetail = () => {
             people: [],
             story: data.story,
             postedBy: {
-              name: data.created_by_name,
               relationship: data.created_by_relationship,
             },
             category: data.category as any,
@@ -139,7 +138,6 @@ const MemoryDetail = () => {
           <div className="pt-6 border-t border-border">
             <p className="text-sm text-muted-foreground mb-2">Posted by</p>
             <RelationshipBadge
-              name={memory.postedBy.name}
               relationship={memory.postedBy.relationship}
             />
           </div>

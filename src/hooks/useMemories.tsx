@@ -61,7 +61,6 @@ export const useMemories = () => {
         people: memoryPeopleMap.get(memory.id) || [],
         story: memory.story,
         postedBy: {
-          name: memory.created_by_name,
           relationship: memory.created_by_relationship,
         },
         category: memory.category as any,

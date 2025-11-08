@@ -22,7 +22,7 @@ export const MemoryCard = ({ memory }: MemoryCardProps) => {
       <div className="absolute bottom-0 left-0 p-4 text-white">
         <div className="bg-black/40 backdrop-blur-sm rounded-full px-3 py-1 inline-block">
           <span className="text-sm font-medium">
-            {memory.postedBy.name} — {memory.postedBy.relationship}
+            {memory.postedBy.relationship}
           </span>
         </div>
       </div>

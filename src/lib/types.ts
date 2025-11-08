@@ -17,7 +17,6 @@ export type MemoryPost = {
   people: Person[];
   story: string;
   postedBy: {
-    name: string;
     relationship: string;
   };
   category: MomentCategory;
@@ -30,7 +29,6 @@ export type Reminder = {
   time: string;
   active: boolean;
   createdBy: {
-    name: string;
     relationship: string;
   };
 };
