@@ -94,7 +94,7 @@ const MemoryDetail = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 -mt-8">
+      <div className="container mx-auto px-4 mt-6">
         <Card className="p-6 shadow-soft-lg">
           <div className="flex items-start justify-between mb-4">
             <h1 className="text-3xl font-semibold">{memory.title}</h1>
