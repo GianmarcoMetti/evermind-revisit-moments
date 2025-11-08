@@ -1,9 +1,27 @@
-import { people } from '@/lib/mockData';
 import { PeopleChip } from './PeopleChip';
 import { useNavigate } from 'react-router-dom';
+import { usePeople } from '@/hooks/usePeople';
+import { Loader2 } from 'lucide-react';
 
 export const PeopleView = () => {
   const navigate = useNavigate();
+  const { people, isLoading } = usePeople();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (people.length === 0) {
+    return (
+      <div className="text-center py-20">
+        <p className="text-xl text-muted-foreground">No people found</p>
+      </div>
+    );
+  }
 
   return (
     <div className="py-8">

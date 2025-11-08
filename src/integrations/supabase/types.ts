@@ -59,6 +59,69 @@ export type Database = {
         }
         Relationships: []
       }
+      memory_people: {
+        Row: {
+          created_at: string
+          id: string
+          memory_id: string
+          person_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          memory_id: string
+          person_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          memory_id?: string
+          person_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memory_people_memory_id_fkey"
+            columns: ["memory_id"]
+            isOneToOne: false
+            referencedRelation: "memories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memory_people_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "people"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      people: {
+        Row: {
+          avatar: string | null
+          created_at: string
+          id: string
+          name: string
+          relationship_to_user: string
+          updated_at: string
+        }
+        Insert: {
+          avatar?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          relationship_to_user: string
+          updated_at?: string
+        }
+        Update: {
+          avatar?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          relationship_to_user?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

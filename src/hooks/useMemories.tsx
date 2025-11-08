@@ -10,14 +10,46 @@ export const useMemories = () => {
 
   const fetchMemories = async () => {
     try {
-      const { data, error } = await supabase
+      const { data: memoriesData, error: memoriesError } = await supabase
         .from('memories')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (memoriesError) throw memoriesError;
 
-      const mappedMemories: MemoryPost[] = (data || []).map((memory) => ({
+      // Fetch all memory-people relationships
+      const { data: memoryPeopleData, error: memoryPeopleError } = await supabase
+        .from('memory_people')
+        .select(`
+          memory_id,
+          people:person_id (
+            id,
+            name,
+            relationship_to_user,
+            avatar
+          )
+        `);
+
+      if (memoryPeopleError) throw memoryPeopleError;
+
+      // Create a map of memory_id to people
+      const memoryPeopleMap = new Map<string, any[]>();
+      (memoryPeopleData || []).forEach((mp: any) => {
+        const memoryId = mp.memory_id;
+        if (!memoryPeopleMap.has(memoryId)) {
+          memoryPeopleMap.set(memoryId, []);
+        }
+        if (mp.people) {
+          memoryPeopleMap.get(memoryId)?.push({
+            id: mp.people.id,
+            name: mp.people.name,
+            relationshipToUser: mp.people.relationship_to_user,
+            avatar: mp.people.avatar,
+          });
+        }
+      });
+
+      const mappedMemories: MemoryPost[] = (memoriesData || []).map((memory) => ({
         id: memory.id,
         title: memory.title,
         date: memory.date,
@@ -26,7 +58,7 @@ export const useMemories = () => {
           url: memory.media_url || '',
           aspect: 'square' as const,
         },
-        people: [],
+        people: memoryPeopleMap.get(memory.id) || [],
         story: memory.story,
         postedBy: {
           name: memory.created_by_name,
