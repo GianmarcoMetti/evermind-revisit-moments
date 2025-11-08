@@ -1,4 +1,4 @@
-import { MemoryPost, Person, Reminder } from './types';
+import { MemoryPost, Person, Reminder, Message } from './types';
 import memoryBeach from '@/assets/memory-beach.jpg';
 import memoryDinner from '@/assets/memory-dinner.jpg';
 import memoryGarden from '@/assets/memory-garden.jpg';
@@ -116,8 +116,83 @@ export const memories: MemoryPost[] = [
 ];
 
 export const reminders: Reminder[] = [
-  { id: '1', text: 'Take morning medication', time: '8:00 AM', active: true },
-  { id: '2', text: 'Video call with Anna', time: '2:00 PM', active: true },
-  { id: '3', text: 'Afternoon walk', time: '4:00 PM', active: true },
-  { id: '4', text: 'Evening medication', time: '7:00 PM', active: true },
+  { 
+    id: '1', 
+    text: 'Take morning medication', 
+    time: '8:00 AM', 
+    active: true,
+    createdBy: { name: 'Anna', relationship: 'daughter' }
+  },
+  { 
+    id: '2', 
+    text: 'Video call with Anna', 
+    time: '2:00 PM', 
+    active: true,
+    createdBy: { name: 'Anna', relationship: 'daughter' }
+  },
+  { 
+    id: '3', 
+    text: 'Birthday for Sarah (her grandson)', 
+    time: '3:00 PM', 
+    active: true,
+    createdBy: { name: 'Anna', relationship: 'daughter' }
+  },
+  { 
+    id: '4', 
+    text: 'Evening medication', 
+    time: '7:00 PM', 
+    active: true,
+    createdBy: { name: 'Michael', relationship: 'son' }
+  },
+];
+
+export const messages: Message[] = [
+  {
+    id: 'm1',
+    from: 'Anna',
+    relationship: 'daughter',
+    content: 'Hi Mom! Here\'s a photo from the beach with Sarah last week.',
+    date: '2024-08-16',
+    usedForMemory: true,
+  },
+  {
+    id: 'm2',
+    from: 'Michael',
+    relationship: 'son',
+    content: 'Sharing the family dinner photos from Sunday!',
+    date: '2024-11-02',
+    usedForMemory: true,
+  },
+  {
+    id: 'm3',
+    from: 'Anna',
+    relationship: 'daughter',
+    content: 'Don\'t forget to take your medication at 8 AM and 7 PM daily.',
+    date: '2024-11-01',
+    usedForReminder: true,
+  },
+  {
+    id: 'm4',
+    from: 'Margaret',
+    relationship: 'sister',
+    content: 'Remember our walk in the spring garden? Such beautiful memories.',
+    date: '2024-04-21',
+    usedForMemory: true,
+  },
+  {
+    id: 'm5',
+    from: 'Anna',
+    relationship: 'daughter',
+    content: 'Reminder: Sarah\'s birthday is coming up next week!',
+    date: '2024-11-03',
+    usedForReminder: true,
+  },
+  {
+    id: 'm6',
+    from: 'Tom',
+    relationship: 'friend',
+    content: 'Found this old bicycle that looks just like yours!',
+    date: '2024-07-11',
+    usedForMemory: true,
+  },
 ];

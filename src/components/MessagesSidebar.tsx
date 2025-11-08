@@ -1,38 +1,69 @@
 import { useState } from 'react';
-import { memories } from '@/lib/mockData';
-import { ChevronDown, ChevronRight, MessageCircle } from 'lucide-react';
+import { messages } from '@/lib/mockData';
+import { ChevronDown, ChevronRight, MessageCircle, ChevronLeft, CheckCircle2, Bell, Image } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
-export const MessagesSidebar = () => {
-  const navigate = useNavigate();
+interface MessagesSidebarProps {
+  isOpen: boolean;
+  onToggle: () => void;
+}
+
+export const MessagesSidebar = ({ isOpen, onToggle }: MessagesSidebarProps) => {
   const [expandedPerson, setExpandedPerson] = useState<string | null>(null);
 
-  // Group memories by person
-  const messagesByPerson = memories.reduce((acc, memory) => {
-    const personName = memory.postedBy.name;
+  // Group messages by person
+  const messagesByPerson = messages.reduce((acc, message) => {
+    const personName = message.from;
     if (!acc[personName]) {
       acc[personName] = {
-        relationship: memory.postedBy.relationship,
+        relationship: message.relationship,
         messages: [],
       };
     }
-    acc[personName].messages.push(memory);
+    acc[personName].messages.push(message);
     return acc;
-  }, {} as Record<string, { relationship: string; messages: typeof memories }>);
+  }, {} as Record<string, { relationship: string; messages: typeof messages }>);
 
   const togglePerson = (name: string) => {
     setExpandedPerson(expandedPerson === name ? null : name);
   };
 
   return (
-    <div className="w-80 bg-card border-r border-border h-full overflow-y-auto">
-      <div className="p-4 border-b border-border sticky top-0 bg-card z-10">
-        <div className="flex items-center gap-2">
-          <MessageCircle className="h-5 w-5 text-primary" />
-          <h2 className="text-lg font-semibold">Messages</h2>
+    <>
+      {!isOpen && (
+        <Button
+          onClick={onToggle}
+          variant="outline"
+          size="icon"
+          className="fixed left-4 top-4 z-50 rounded-full shadow-lg bg-card"
+        >
+          <MessageCircle className="h-5 w-5" />
+        </Button>
+      )}
+      
+      <div 
+        className={`bg-card border-r border-border h-full overflow-y-auto transition-all duration-300 ${
+          isOpen ? 'w-80' : 'w-0'
+        }`}
+        style={{ display: isOpen ? 'block' : 'none' }}
+      >
+        <div className="p-4 border-b border-border sticky top-0 bg-card z-10">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <MessageCircle className="h-5 w-5 text-primary" />
+              <h2 className="text-lg font-semibold">Messages</h2>
+            </div>
+            <Button
+              onClick={onToggle}
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
-      </div>
       
       <div className="p-2">
         {Object.entries(messagesByPerson).map(([name, data]) => {
@@ -68,26 +99,32 @@ export const MessagesSidebar = () => {
               
               {isExpanded && (
                 <div className="ml-4 mt-1 space-y-1">
-                  {data.messages.map((memory) => (
-                    <button
-                      key={memory.id}
-                      onClick={() => navigate(`/memory/${memory.id}`)}
-                      className="w-full text-left p-2 rounded-lg hover:bg-secondary/50 transition-colors group"
+                  {data.messages.map((message) => (
+                    <div
+                      key={message.id}
+                      className="w-full text-left p-3 rounded-lg bg-secondary/30 transition-colors"
                     >
                       <div className="flex gap-2">
-                        <img
-                          src={memory.media.url}
-                          alt={memory.title}
-                          className="w-12 h-12 object-cover rounded-lg"
-                        />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate group-hover:text-primary transition-colors">
-                            {memory.title}
-                          </p>
-                          <p className="text-xs text-muted-foreground">{memory.date}</p>
+                          <p className="text-sm mb-1">{message.content}</p>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <p className="text-xs text-muted-foreground">{message.date}</p>
+                            {message.usedForMemory && (
+                              <span className="inline-flex items-center gap-1 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                                <Image className="h-3 w-3" />
+                                Memory
+                              </span>
+                            )}
+                            {message.usedForReminder && (
+                              <span className="inline-flex items-center gap-1 text-xs bg-accent/50 text-accent-foreground px-2 py-0.5 rounded-full">
+                                <Bell className="h-3 w-3" />
+                                Reminder
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </button>
+                    </div>
                   ))}
                 </div>
               )}
@@ -96,5 +133,6 @@ export const MessagesSidebar = () => {
         })}
       </div>
     </div>
+    </>
   );
 };

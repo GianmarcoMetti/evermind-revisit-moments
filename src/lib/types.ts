@@ -29,6 +29,20 @@ export type Reminder = {
   text: string;
   time: string;
   active: boolean;
+  createdBy: {
+    name: string;
+    relationship: string;
+  };
+};
+
+export type Message = {
+  id: string;
+  from: string;
+  relationship: string;
+  content: string;
+  date: string;
+  usedForMemory?: boolean;
+  usedForReminder?: boolean;
 };
 
 export type FilterType = 'all' | 'people' | 'moments' | 'map';
