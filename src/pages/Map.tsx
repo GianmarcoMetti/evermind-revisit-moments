@@ -38,7 +38,7 @@ const Map = () => {
 
       <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border">
         <div className="container mx-auto px-4 py-3 flex justify-around items-center">
-          <Link to="/" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+          <Link to="/app" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
             <span className="text-sm font-medium">Memories</span>
           </Link>
           <Link to="/people" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
