@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/sidebar';
 
 const navItems = [
-  { title: 'Memories', url: '/', icon: Home },
+  { title: 'Memories', url: '/app', icon: Home },
   { title: 'People', url: '/people', icon: Users },
   { title: 'Map', url: '/map', icon: Map },
   { title: 'Reminders', url: '/reminders', icon: Calendar },
@@ -45,7 +45,7 @@ export const AppSidebar = () => {
                   <SidebarMenuButton asChild>
                     <NavLink 
                       to={item.url} 
-                      end={item.url === '/'} 
+                      end={item.url === '/app'}
                       className="hover:bg-muted/50" 
                       activeClassName="bg-muted text-primary font-medium"
                     >

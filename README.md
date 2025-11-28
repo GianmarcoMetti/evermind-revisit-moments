@@ -60,6 +60,18 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
+## Virtual brand landing page setup
+
+The `/` route now serves a landing page that lets restaurant owners upload menus for AI analysis. To
+use the submission flow you need to configure:
+
+- `VITE_SUPABASE_MENU_BUCKET` – the Supabase storage bucket that will hold uploaded menus
+  (e.g. `menu-uploads`). Make sure the bucket allows public reads so the generated public URL works.
+- `N8N_WEBHOOK_URL` – the webhook URL that receives submissions from `/api/submit-menu`.
+
+The form uploads files to Supabase using signed upload URLs, then posts the payload (with the public
+file URL or menu link) to the webhook for processing.
+
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/f4a74caf-a5f3-45c6-a5b2-3029e043ee29) and click on Share -> Publish.
